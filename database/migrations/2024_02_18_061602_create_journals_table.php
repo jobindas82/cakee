@@ -15,14 +15,13 @@ class CreateJournalsTable extends Migration
     {
         Schema::create('journals', function (Blueprint $table) {
 
-            $table->unsignedInteger('id')->primary();
+            $table->id();
             $table->smallInteger('type')->nullable();
             $table->dateTime('date')->index();
             $table->string('description')->nullable();
             $table->smallInteger('is_posted')->default(1)->index();
             $table->unsignedBigInteger('user_id');
-            $table->timestamp('create_at')->useCurrent();
-            $table->timestamp('update_at')->nullable();
+            $table->timestamps();
 
             $table->foreign('user_id', 'fk_journals_users1')->references('id')->on('users');
         });

@@ -15,17 +15,16 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
 
-            $table->unsignedInteger('id')->primary();
-            $table->unsignedInteger('journal_id');
-            $table->unsignedInteger('account_id');
-            $table->unsignedInteger('currency_id');
+            $table->id();
+            $table->unsignedBigInteger('journal_id');
+            $table->unsignedBigInteger('account_id');
+            $table->unsignedBigInteger('currency_id');
             $table->decimal('amount_b', 10, 3);
             $table->decimal('amount', 10, 3);
             $table->decimal('ex_rate', 10, 8);
             $table->string('split_with', 45)->nullable()->index();
             $table->string('notes', 45)->nullable()->index();
-            $table->timestamp('create_at')->useCurrent();
-            $table->timestamp('update_at')->nullable();
+            $table->timestamps();
 
             $table->foreign('account_id', 'fk_transactions_accounts1')->references('id')->on('accounts');
             $table->foreign('currency_id', 'fk_transactions_currency1')->references('id')->on('currency');

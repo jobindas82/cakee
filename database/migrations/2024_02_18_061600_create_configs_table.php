@@ -14,12 +14,11 @@ class CreateConfigsTable extends Migration
     public function up()
     {
         Schema::create('configs', function (Blueprint $table) {
-            $table->unsignedInteger('id')->primary();
+            $table->id();
             $table->string('name')->unique('name');
             $table->smallInteger('is_active')->default(1);
             $table->json('config')->nullable();
-            $table->timestamp('create_at')->useCurrent();
-            $table->timestamp('update_at')->nullable();
+            $table->timestamps();
         });
     }
 

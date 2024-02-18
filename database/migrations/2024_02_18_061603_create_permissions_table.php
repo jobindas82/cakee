@@ -1,12 +1,8 @@
 <?php
 
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
 
 return new class extends Migration
 {
@@ -116,29 +112,6 @@ return new class extends Migration
 
             $table->primary([$pivotPermission, $pivotRole], 'role_has_permissions_permission_id_role_id_primary');
         });
-
-        Role::create(['name' => 'Super Admin']);
-        Role::create(['name' => 'Admin']);
-        Role::create(['name' => 'Viewer']);
-        Role::create(['name' => 'Editor']);
-
-        Permission::create(['name' => 'User-list']);
-        Permission::create(['name' => 'User-alter']);
-        Permission::create(['name' => 'Roles']);
-
-        $user = User::create([
-            'name' => 'Cakee Admin',
-            'email' => 'admin@cakee.com',
-            'email_verified_at' => now(),
-            'password' => Hash::make('1234567890'),
-            'config' => [
-                "sidebar" => "wide",
-                "darkMode" => "light"
-            ]
-        ]);
-
-        $user->markEmailAsVerified();
-        $user->assignRole('Super Admin');
 
         app('cache')
             ->store(config('permission.cache.store') != 'default' ? config('permission.cache.store') : null)

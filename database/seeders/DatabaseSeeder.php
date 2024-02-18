@@ -2,12 +2,18 @@
 
 namespace Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use App\Models\Brand;
-use App\Models\ProductCategory;
+use App\Constants\AccountClass;
+use App\Constants\SysCode;
+use App\Models\Account;
+use App\Models\Config;
+use App\Models\Currency;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -15,206 +21,186 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('brands')->insertOrIgnore([
-            [
-                'name' => 'Ocean Nutrition',
-                'is_active' => '1',
-                'created_at' => now()->format('Y-m-d H:i:s'),
-                'updated_at' => now()->format('Y-m-d H:i:s'),
-            ],
-            [
-                'name' => 'Applaws',
-                'is_active' => '1',
-                'created_at' => now()->format('Y-m-d H:i:s'),
-                'updated_at' => now()->format('Y-m-d H:i:s'),
-            ],
-            [
-                'name' => 'Vita Bone',
-                'is_active' => '1',
-                'created_at' => now()->format('Y-m-d H:i:s'),
-                'updated_at' => now()->format('Y-m-d H:i:s'),
-            ],
-            [
-                'name' => 'MyFamily',
-                'is_active' => '1',
-                'created_at' => now()->format('Y-m-d H:i:s'),
-                'updated_at' => now()->format('Y-m-d H:i:s'),
-            ],
-            [
-                'name' => 'Acana',
-                'is_active' => '1',
-                'created_at' => now()->format('Y-m-d H:i:s'),
-                'updated_at' => now()->format('Y-m-d H:i:s'),
-            ],
-            [
-                'name' => 'Farmina',
-                'is_active' => '1',
-                'created_at' => now()->format('Y-m-d H:i:s'),
-                'updated_at' => now()->format('Y-m-d H:i:s'),
-            ],
-        ]);
+        //Roles
+        Role::create(['name' => 'Super Admin']);
+        Role::create(['name' => 'Admin']);
+        Role::create(['name' => 'Viewer']);
+        Role::create(['name' => 'Editor']);
 
-        DB::table('product_categories')->insertOrIgnore([
-            [
-                'name' => 'Foods',
-                'is_active' => '1',
-                'created_at' => now()->format('Y-m-d H:i:s'),
-                'updated_at' => now()->format('Y-m-d H:i:s'),
-            ],
-            [
-                'name' => 'Beds',
-                'is_active' => '1',
-                'created_at' => now()->format('Y-m-d H:i:s'),
-                'updated_at' => now()->format('Y-m-d H:i:s'),
-            ],
-            [
-                'name' => 'Vest',
-                'is_active' => '1',
-                'created_at' => now()->format('Y-m-d H:i:s'),
-                'updated_at' => now()->format('Y-m-d H:i:s'),
-            ],
-            [
-                'name' => 'Booties',
-                'is_active' => '1',
-                'created_at' => now()->format('Y-m-d H:i:s'),
-                'updated_at' => now()->format('Y-m-d H:i:s'),
-            ],
-            [
-                'name' => 'Sweaters',
-                'is_active' => '1',
-                'created_at' => now()->format('Y-m-d H:i:s'),
-                'updated_at' => now()->format('Y-m-d H:i:s'),
-            ],
-            [
-                'name' => 'Toys',
-                'is_active' => '1',
-                'created_at' => now()->format('Y-m-d H:i:s'),
-                'updated_at' => now()->format('Y-m-d H:i:s'),
-            ],
-            [
-                'name' => 'Bags',
-                'is_active' => '1',
-                'created_at' => now()->format('Y-m-d H:i:s'),
-                'updated_at' => now()->format('Y-m-d H:i:s'),
-            ],
-            [
-                'name' => 'Storage',
-                'is_active' => '1',
-                'created_at' => now()->format('Y-m-d H:i:s'),
-                'updated_at' => now()->format('Y-m-d H:i:s'),
-            ],
-            [
-                'name' => 'Nail trimmers',
-                'is_active' => '1',
-                'created_at' => now()->format('Y-m-d H:i:s'),
-                'updated_at' => now()->format('Y-m-d H:i:s'),
-            ],
-            [
-                'name' => 'Cameras',
-                'is_active' => '1',
-                'created_at' => now()->format('Y-m-d H:i:s'),
-                'updated_at' => now()->format('Y-m-d H:i:s'),
-            ],
-            [
-                'name' => 'Brushes',
-                'is_active' => '1',
-                'created_at' => now()->format('Y-m-d H:i:s'),
-                'updated_at' => now()->format('Y-m-d H:i:s'),
-            ],
-            [
-                'name' => 'Tags',
-                'is_active' => '1',
-                'created_at' => now()->format('Y-m-d H:i:s'),
-                'updated_at' => now()->format('Y-m-d H:i:s'),
-            ],
-            [
-                'name' => 'Clothes',
-                'is_active' => '1',
-                'created_at' => now()->format('Y-m-d H:i:s'),
-                'updated_at' => now()->format('Y-m-d H:i:s'),
-            ],
-            [
-                'name' => 'Collars/leashes',
-                'is_active' => '1',
-                'created_at' => now()->format('Y-m-d H:i:s'),
-                'updated_at' => now()->format('Y-m-d H:i:s'),
-            ],
-        ]);
+        $permissions = [
+            'User-list',
+            'User-alter',
+            'Roles',
+            'Journals',
+            'Accounts',
+            'Journals-post',
+            'Reports-transactions',
+            'Reports-Expenses',
+            'Reports-Receivable',
+        ];
 
-        $data = [];
-        foreach ([1, 2] as $petId) {
-            foreach (Brand::all() as $brand) {
-                foreach (ProductCategory::all() as $i => $category) {
-                    $petName = $petId == 1 ? 'Dog' : 'Cat';
-                    $originalPrice = rand(5, 15);
-                    $discountedPrice = $originalPrice - rand(1, 4);
-                    $data[] = [
-                        'name' => $brand->name . ' ' . $petName . ' ' . $category->name . ' x 1 Each',
-                        'part_no' => 'A' . $petId . $brand->id . $category->id . rand(100, 9999),
-                        'barcode' => '01' . $petId . $brand->id . $category->id . rand(100, 99999),
-                        'description' => $brand->name . ' ' . $petName . ' ' . $category->name . ' description',
-                        'quantity_available' => '100',
-                        'original_price' => $originalPrice,
-                        'discounted_price' => $discountedPrice,
-                        'brand_id' => $brand->id,
-                        'pet_id' => $petId,
-                        'category_id' => $category->id,
-                        'item_on_sale' => rand(0, 1),
-                        'new_arrival' => rand(0, 1),
-                        'unit' => 'Each',
-                        'is_active' => '1',
-                        'created_at' => now()->format('Y-m-d H:i:s'),
-                        'updated_at' => now()->format('Y-m-d H:i:s'),
-                    ];
-
-                }
-            }
+        foreach($permissions as $each){
+            Permission::create(['name' => $each]);
         }
 
-        DB::table('products')->insertOrIgnore($data);
 
-        $data = [];
-        foreach ([1, 2] as $petId) {
-            $data[] = [
-                'name' => 'Full Grooming',
-                'pet_id' => $petId,
-                'min_price' => '10',
-                'rating' => '4.2',
-                'service_type' => '1,2',
-                'features' => 'Door Service,Pick-up and Drop,Free Supplements,Pet-friendly crew,Pet safety measures',
-                'details' => 'Bathing, Shampooing, Conditioning, Blow drying, Dematting, Haircut and trim, Hair Brushing, Nail trim, Paw trimming, Ear Cleaning, Eye cleaning, Anal glad expansion, Back shaving',
-                'best_value' => 'Foods',
-                'is_active' => '1',
+        $user = User::create([
+            'name' => 'Cakee Admin',
+            'email' => 'admin@cakee.com',
+            'email_verified_at' => now(),
+            'password' => Hash::make('1234567890'),
+            'config' => [
+                "sidebar" => "wide",
+                "darkMode" => "light"
+            ]
+        ]);
+
+        $user->markEmailAsVerified();
+        $user->assignRole('Super Admin');
+
+        Currency::create([
+            'name' => 'Canadian Dollar',
+            'symbol' => 'CAD',
+            'ex_rate' => '1',
+            'is_default' => '1',
+        ]);
+
+        Config::create([
+            'name' => 'DEFAULT_CUR',
+            'config' => json_encode(['id' => 1, 'symbol' => 'CAD', 'name' => 'Canadian Dollar']),
+        ]);
+
+        $accounts = [
+            [
+                'name' => 'Assets',
+                'sys_code' => SysCode::ASSET_PARENT,
+                'class' => AccountClass::ASSET,
+                'currency_id' => 1,
+                'is_editable' => 0,
+                'is_parent' => 1,
                 'created_at' => now()->format('Y-m-d H:i:s'),
                 'updated_at' => now()->format('Y-m-d H:i:s'),
-            ];
-            $data[] = [
-                'name' => 'Basic Grooming',
-                'pet_id' => $petId,
-                'min_price' => '5',
-                'rating' => '4.3',
-                'service_type' => '1,2',
-                'features' => 'Door Service,Pick-up and Drop,Free Supplements,Pet-friendly crew,Pet safety measures',
-                'details' => 'Bathing, Shampooing, Conditioning, Blow drying, Dematting, Haircut and trim, Hair Brushing, Nail trim, Paw trimming, Ear Cleaning, Eye cleaning, Anal glad expansion, Back shaving',
-                'best_value' => '0',
-                'is_active' => '1',
+            ],
+            [
+                'name' => 'Equity & Liabilities',
+                'sys_code' => SysCode::LIABILITY_PARENT,
+                'class' => AccountClass::LIABILITY,
+                'currency_id' => 1,
+                'is_editable' => 0,
+                'is_parent' => 1,
                 'created_at' => now()->format('Y-m-d H:i:s'),
                 'updated_at' => now()->format('Y-m-d H:i:s'),
-            ];
-            $data[] = [
-                'name' => 'Haircut & Nail trim only',
-                'pet_id' => $petId,
-                'min_price' => '5',
-                'rating' => '4.4',
-                'service_type' => '1,2',
-                'features' => 'Door Service,Pick-up and Drop,Free Supplements,Pet-friendly crew,Pet safety measures',
-                'details' => 'Bathing, Shampooing, Conditioning, Blow drying, Dematting, Haircut and trim, Hair Brushing, Nail trim, Paw trimming, Ear Cleaning, Eye cleaning, Anal glad expansion, Back shaving',
-                'best_value' => '0',
-                'is_active' => '1',
+            ],
+            [
+                'name' => 'Income',
+                'sys_code' => SysCode::INCOME_PARENT,
+                'class' => AccountClass::INCOME,
+                'currency_id' => 1,
+                'is_editable' => 0,
+                'is_parent' => 1,
                 'created_at' => now()->format('Y-m-d H:i:s'),
                 'updated_at' => now()->format('Y-m-d H:i:s'),
-            ];
+            ],
+            [
+                'name' => 'Expense',
+                'sys_code' => SysCode::EXPENSE_PARENT,
+                'class' => AccountClass::EXPENSE,
+                'currency_id' => 1,
+                'is_editable' => 0,
+                'is_parent' => 1,
+                'created_at' => now()->format('Y-m-d H:i:s'),
+                'updated_at' => now()->format('Y-m-d H:i:s'),
+            ],
+            [
+                'name' => 'Current Assets',
+                'class' => AccountClass::ASSET,
+                'currency_id' => 1,
+                'is_editable' => 0,
+                'is_parent' => 1,
+                'parent_id' => 1,
+                'route' => '1',
+                'created_at' => now()->format('Y-m-d H:i:s'),
+                'updated_at' => now()->format('Y-m-d H:i:s'),
+            ],
+            [
+                'name' => 'Bank Accounts',
+                'class' => AccountClass::ASSET,
+                'sys_code' => SysCode::ASSET_BANK,
+                'currency_id' => 1,
+                'is_editable' => 0,
+                'is_parent' => 1,
+                'parent_id' => 1,
+                'route' => '1,5',
+                'created_at' => now()->format('Y-m-d H:i:s'),
+                'updated_at' => now()->format('Y-m-d H:i:s'),
+            ],
+            [
+                'name' => 'Receivable',
+                'class' => AccountClass::ASSET,
+                'sys_code' => SysCode::ASSET_RECEIVABLE,
+                'currency_id' => 1,
+                'is_editable' => 0,
+                'is_parent' => 1,
+                'parent_id' => 1,
+                'route' => '1,5',
+                'created_at' => now()->format('Y-m-d H:i:s'),
+                'updated_at' => now()->format('Y-m-d H:i:s'),
+            ],
+            [
+                'name' => 'Fixed Assets',
+                'class' => AccountClass::ASSET,
+                'currency_id' => 1,
+                'is_editable' => 0,
+                'is_parent' => 1,
+                'parent_id' => 1,
+                'route' => '1',
+                'created_at' => now()->format('Y-m-d H:i:s'),
+                'updated_at' => now()->format('Y-m-d H:i:s'),
+            ],
+            [
+                'name' => 'Credit cards',
+                'sys_code' => SysCode::LIABILITY_CC,
+                'class' => AccountClass::LIABILITY,
+                'currency_id' => 1,
+                'is_editable' => 0,
+                'is_parent' => 1,
+                'parent_id' => 2,
+                'route' => '2',
+                'created_at' => now()->format('Y-m-d H:i:s'),
+                'updated_at' => now()->format('Y-m-d H:i:s'),
+            ],
+            [
+                'name' => 'Loans & Credit Lines',
+                'sys_code' => SysCode::LIABILITY_LOAN,
+                'class' => AccountClass::LIABILITY,
+                'currency_id' => 1,
+                'is_editable' => 0,
+                'is_parent' => 1,
+                'parent_id' => 2,
+                'route' => '2',
+                'created_at' => now()->format('Y-m-d H:i:s'),
+                'updated_at' => now()->format('Y-m-d H:i:s'),
+            ],
+            [
+                'name' => 'Opening balance',
+                'sys_code' => SysCode::EQUITY_OPENING,
+                'class' => AccountClass::LIABILITY,
+                'currency_id' => 1,
+                'is_editable' => 0,
+                'is_parent' => 0,
+                'parent_id' => 2,
+                'route' => '2',
+                'created_at' => now()->format('Y-m-d H:i:s'),
+                'updated_at' => now()->format('Y-m-d H:i:s'),
+            ],
+        ];
+        foreach($accounts as $each){
+            Account::create($each);
         }
-        DB::table('packages')->insertOrIgnore($data);
+
+        app('cache')
+            ->store(config('permission.cache.store') != 'default' ? config('permission.cache.store') : null)
+            ->forget(config('permission.cache.key'));
+
     }
 }
